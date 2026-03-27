@@ -585,7 +585,6 @@
   <field id="surface__disp" name="urbdisp" long_name="Urban displacement height" unit="m" domain_ref="face" />
   <field id="surface__albwl" name="urbalbwl" long_name="Urban wall abedo" unit="1" domain_ref="face" />
   <field id="surface__albrd" name="urbalbrd" long_name="Urban road abedo" unit="1" domain_ref="face" />
-  <field id="surface__inland_basin_flow" name="inland_basin_flow" long_name="Inland basin flow" unit="kg m-2 s-1" domain_ref="face" />
   <!-- GBM surface diagnostics derived from BL turbulence diagnostics -->
   <!-- First line extracts level 1, second line removes vertical coordinate, cannot do as one -->
   <field id="zoomed__sh" field_ref="turbulence__heat_flux_bl" grid_ref="half_level_1_face_zoom" />
@@ -638,6 +637,7 @@
   <field id="soil__soil_moist_wilt" name="soil_moist_wilt" long_name="soil_moisture_at_wilting_point" unit="m3 m-3" domain_ref="face" />
   <field id="soil__soil_moist_crit" name="soil_moist_crit" long_name="soil_moisture_at_critical_point" unit="m3 m-3" domain_ref="face" /> 
   <field id="soil__soil_moist_sat" name="soil_moist_sat" long_name="soil_moisture_at_saturation" unit="m3 m-3" domain_ref="face" />
+  <field id="soil__inland_basin_flow" name="inland_basin_flow" long_name="Inland basin flow" unit="kg m-2 s-1" domain_ref="face" />
   <!-- Boundary layer turbulence diagnostics -->
   <field id="turbulence__dtheta_blcnv" name="dtheta_blcnv" long_name="potential_temperature_increment_from_bl_and_convection_schemes" unit="K" grid_ref="full_level_face_grid" />
   <field id="turbulence__dt_bl" name="dt_bl" long_name="temperature_increment_from_bl_scheme" unit="K" grid_ref="full_level_face_grid" />

@@ -17,11 +17,11 @@ class UpgradeError(Exception):
 
     __str__ = __repr__
 
-class vn21_t148(MacroUpgrade):
-    # Upgrade macro for #148 by Dan Copsey
+class vn31_t401(MacroUpgrade):
+    # Upgrade macro for #401 by Dan Copsey
 
-    BEFORE_TAG = "vn2.1"
-    AFTER_TAG = "vn2.1_t148"
+    BEFORE_TAG = "vn3.1"
+    AFTER_TAG = "vn3.1_t401"
 
     def upgrade(self, config, meta_config=None):
         # Add settings
