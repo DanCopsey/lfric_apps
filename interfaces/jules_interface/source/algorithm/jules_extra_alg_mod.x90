@@ -302,7 +302,7 @@ contains
                                     melt_pond_depth)
 
       ! Output extra coupling diagnostics
-      call inland_basin_flow%write_field('surface__inland_basin_flow')
+      call inland_basin_flow%write_field('soil__inland_basin_flow')
 
     end if
 
