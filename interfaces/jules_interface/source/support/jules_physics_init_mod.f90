@@ -22,15 +22,10 @@ module jules_physics_init_mod
                               i_high_wind_drag_null,                           &
                               i_high_wind_drag_limited,                        &
                               i_high_wind_drag_reduced_v1,                     &
-                              meltpond_alb_vn,                                 &
+                              buddy_sea_on,                                    &
                               meltpond_alb_vn_none,                            &
                               meltpond_alb_vn_cice,                            &
-                              meltpond_alb_vn_malinka,                         &
-                              l_zenith_albedo_in => l_zenith_albedo,           &
-                              snow_grain_size_min_in => snow_grain_size_min,   &
-                              snow_grain_size_max_in => snow_grain_size_max,   &
-                              snowpatch_in => snowpatch,                       &
-                              buddy_sea_on
+                              meltpond_alb_vn_malinka
   use jules_snow_config_mod, only :                                            &
                               i_basal_melting_opt_none,                        &
                               i_basal_melting_opt_instant,                     &
@@ -143,7 +138,9 @@ contains
          pen_rad_frac_cice, sw_beta_cice,                                   &
          buddy_sea, cdn_hw_sea, cdn_max_sea, u_cdn_hw, u_cdn_max,           &
          i_high_wind_drag, ip_hwdrag_null, ip_hwdrag_limited,               &
-         ip_hwdrag_reduced_v1
+         ip_hwdrag_reduced_v1,                                              &
+         ip_meltpond_alb_vn_none, ip_meltpond_alb_vn_cice,                  &
+         ip_meltpond_alb_vn_malinka
     use jules_snow_mod, only: check_jules_snow,                             &
          cansnowpft, nsmax, a_snow_et, b_snow_et, c_snow_et, can_clump,     &
          dzsnow, frac_snow_subl_melt, i_snow_cond_parm, l_et_metamorph,     &
@@ -310,13 +307,13 @@ contains
     snowpatch            = snowpatch_in
 
     ! Setup the melt pond albedo scheme
-    select case (meltpond_alb_vn)
+    select case (config%jules_sea_seaice%meltpond_alb_vn())
       case(meltpond_alb_vn_none)
-        i_meltpond_alb_vn = 0
+        i_meltpond_alb_vn = ip_meltpond_alb_vn_none
       case(meltpond_alb_vn_cice)
-        i_meltpond_alb_vn = 1
+        i_meltpond_alb_vn = ip_meltpond_alb_vn_cice
       case(meltpond_alb_vn_malinka)
-        i_meltpond_alb_vn = 2
+        i_meltpond_alb_vn = ip_meltpond_alb_vn_malinka
     end select
 
     ! Setup switches that vary depending if the model is
