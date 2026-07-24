@@ -373,7 +373,7 @@ subroutine output_diags_for_radiation( dtheta_rad, &
   cos_zenith_angle, lit_fraction, skyview, &
   cos_zenith_angle_rts, lit_fraction_rts, &
   stellar_irradiance_rts, orographic_correction_rts, &
-  sw_up_tile, aer_mix_ratio, &
+  sw_up_tile, sw_up_blue_tile, aer_mix_ratio, &
   aer_sw_absorption, aer_sw_scattering, aer_sw_asymmetry, &
   aer_lw_absorption, aer_lw_scattering, aer_lw_asymmetry, &
   pressure_in_wth, temperature_in_wth, d_mass, rho_in_wth, &
@@ -431,7 +431,7 @@ subroutine output_diags_for_radiation( dtheta_rad, &
     cos_zenith_angle, lit_fraction, skyview, &
     cos_zenith_angle_rts, lit_fraction_rts, &
     stellar_irradiance_rts, orographic_correction_rts, &
-    sw_up_tile, aer_mix_ratio, &
+    sw_up_tile, sw_up_blue_tile, aer_mix_ratio, &
     aer_sw_absorption, aer_sw_scattering, aer_sw_asymmetry, &
     aer_lw_absorption, aer_lw_scattering, aer_lw_asymmetry, &
     pressure_in_wth, temperature_in_wth, d_mass, rho_in_wth, &
@@ -533,6 +533,7 @@ subroutine output_diags_for_radiation( dtheta_rad, &
     'radiation__orographic_correction_rts' )
 
   call sw_up_tile%write_field('radiation__sw_up_tile')
+  call sw_up_blue_tile%write_field('radiation__sw_up_blue_tile')
 
   if (diagnostic_to_be_sampled('radiation__aer_mix_ratio_radinput')) &
        call aer_mix_ratio%write_field('radiation__aer_mix_ratio_radinput')

@@ -693,6 +693,7 @@
   <field id="radiation__sw_direct_blue_surf" name="sw_direct_blue_surf" long_name="surface_direct_0-690nm_flux" unit="W m-2" domain_ref="face" />
   <field id="radiation__sw_up_surf" name="sw_up_surf" long_name="surface_upward_shortwave_flux" unit="W m-2" domain_ref="face" />
   <field id="radiation__sw_up_tile" name="sw_up_tile" long_name="surface_upward_shortwave_flux_on_tiles" unit="W m-2" domain_ref="face" axis_ref="surface_tiles" />
+  <field id="radiation__sw_up_blue_tile" name="sw_up_blue_tile" long_name="surface_upward_0-690nm_flux_on_tiles" unit="W m-2" domain_ref="face" axis_ref="surface_tiles" />
   <field id="radiation__sw_net_surf" name="sw_net_surf" long_name="surface_net_shortwave_flux" unit="W m-2" domain_ref="face" />
   <field id="radiation__lw_up_toa" name="lw_up_toa" long_name="toa_upward_longwave_flux" unit="W m-2" domain_ref="face" />
   <field id="radiation__lw_down_surf" name="lw_down_surf" long_name="surface_downward_longwave_flux" unit="W m-2" domain_ref="face" />
