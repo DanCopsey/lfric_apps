@@ -120,7 +120,17 @@ module process_send_fields_2d_mod
         call invoke(setval_X(fld, dep_fld), &
                     inc_a_times_X( r_acc_step, fld ) )
       case ("lf_solar")
-        ! Solar heat flux
+        ! Total solar heat flux
+        call invoke(setval_X(fld, dep_fld), &
+                    inc_a_times_X( r_acc_step, fld ), &
+		    inc_X_times_Y(fld, r_ocean_fraction) )
+      case ("lf_visible")
+        ! Visible solar flux
+        call invoke(setval_X(fld, dep_fld), &
+                    inc_a_times_X( r_acc_step, fld ), &
+		    inc_X_times_Y(fld, r_ocean_fraction) )
+      case ("lf_nir")
+        ! Near inreared solar flux
         call invoke(setval_X(fld, dep_fld), &
                     inc_a_times_X( r_acc_step, fld ), &
 		    inc_X_times_Y(fld, r_ocean_fraction) )

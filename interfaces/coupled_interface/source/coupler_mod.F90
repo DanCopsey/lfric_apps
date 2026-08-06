@@ -216,6 +216,12 @@ module coupler_mod
          'lf_solar', vector_space, checkpoint_restart_flag)
 
     call add_cpl_field(depository, prognostic_fields, &
+         'lf_visible', vector_space, checkpoint_restart_flag)
+
+    call add_cpl_field(depository, prognostic_fields, &
+         'lf_nir', vector_space, checkpoint_restart_flag)
+
+    call add_cpl_field(depository, prognostic_fields, &
          'lf_heatflux', vector_space, checkpoint_restart_flag)
 
     call add_cpl_field(depository, prognostic_fields, &

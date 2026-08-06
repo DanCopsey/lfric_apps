@@ -74,6 +74,7 @@ module accumulate_send_fields_2d_mod
     type( field_type )                           :: cpl_field3
     type( field_type )                           :: cpl_field4
     type( field_type )                           :: cpl_field5
+    type( field_type )                           :: cpl_field6
     type( field_type )                           :: cpl_field1_si
     type( field_type )                           :: cpl_field2_si
     type( field_type )                           :: cpl_field3_si
@@ -145,6 +146,70 @@ module accumulate_send_fields_2d_mod
                 ! average over the whole marine portion of the grid box
                 ! (net_SW_scaled = cpl_field2)
                 X_times_Y( cpl_field2, cpl_field3, sea_frac_previous_ptr ), &
+                ! Add the total to the accumulation
+                inc_X_plus_Y( dep_fld, cpl_field2 ) )
+        case ("lf_visible")
+          call depository%get_field("sw_up_blue_tile", fld_ptr1)
+          call depository%get_field("sw_down_blue_surf", fld_ptr2)
+          ! Initialise temporary fields
+          call cpl_field1%initialise(vector_space=cpl_fs, name="cpl_field1_W3")
+          call cpl_field2%initialise(vector_space=cpl_fs, name="cpl_field2_W3")
+          call cpl_field3%initialise(vector_space=cpl_fs, name="cpl_field3_W3")
+          call invoke(                                                      &
+                ! Extract visible up (visible_up = cpl_field1)
+                multi_extract_kernel_type(cpl_field1, fld_ptr1,             &
+                                    first_sea_tile, n_sea_tile),            &
+                ! Use SW down (visible_down = fld_ptr2)
+                ! Now we need to combine the above fluxes
+                ! net_visible_down = visible_down - visible_up
+                ! (net_visible_down = cpl_field3)
+                X_minus_Y(cpl_field3, fld_ptr2, cpl_field1),                &
+                ! Scale by sea area fraction so that this flux is an
+                ! average over the whole marine portion of the grid box
+                ! (net_visible_scaled = cpl_field2)
+                X_times_Y( cpl_field2, cpl_field3, sea_frac_previous_ptr ), &
+                ! Add the total to the accumulation
+                inc_X_plus_Y( dep_fld, cpl_field2 ) )
+        case ("lf_nir")
+          call depository%get_field("sw_up_blue_tile", fld_ptr1)
+          call depository%get_field("sw_down_blue_surf", fld_ptr2)
+          call depository%get_field("sw_up_tile", fld_ptr3)
+          call depository%get_field("sw_down_surf", fld_ptr4)
+          ! Initialise temporary fields
+          call cpl_field1%initialise(vector_space=cpl_fs, name="cpl_field1_W3")
+          call cpl_field2%initialise(vector_space=cpl_fs, name="cpl_field2_W3")
+          call cpl_field3%initialise(vector_space=cpl_fs, name="cpl_field3_W3")
+          call cpl_field4%initialise(vector_space=cpl_fs, name="cpl_field3_W3")
+          call cpl_field5%initialise(vector_space=cpl_fs, name="cpl_field3_W3")
+          call cpl_field6%initialise(vector_space=cpl_fs, name="cpl_field3_W3")
+          call invoke(                                                      &
+                ! Extract visible up (visible_up = cpl_field1)
+                multi_extract_kernel_type(cpl_field1, fld_ptr1,             &
+                                    first_sea_tile, n_sea_tile),            &
+                ! Use visible down (visible_down = fld_ptr2)
+                ! Now we need to combine the above fluxes
+                ! net_visible_down = visible_down - visible_up
+                ! (net_visible_down = cpl_field3)
+                X_minus_Y(cpl_field3, fld_ptr2, cpl_field1),                &
+
+                ! Extract total SW up (SW_up = cpl_field4)
+                multi_extract_kernel_type(cpl_field4, fld_ptr3,             &
+                                    first_sea_tile, n_sea_tile),            &
+                ! Use SW down (SW_down = fld_ptr4)
+                ! Now we need to combine the above fluxes
+                ! net_SW_down = SW_down - SW_up
+                ! (net_SW_down = cpl_field5)
+                X_minus_Y(cpl_field5, fld_ptr4, cpl_field4),                &
+
+                ! Subtract the visible from the total SW to get the NIR
+                ! (net_nir_down = cpl_field6)
+                ! net_nir_down = net_SW_down - net_visible_down
+                X_minus_Y(cpl_field6, cpl_field5, cpl_field3),              &
+
+                ! Scale by sea area fraction so that this flux is an
+                ! average over the whole marine portion of the grid box
+                ! (net_visible_scaled = cpl_field2)
+                X_times_Y( cpl_field2, cpl_field6, sea_frac_previous_ptr ), &
                 ! Add the total to the accumulation
                 inc_X_plus_Y( dep_fld, cpl_field2 ) )
         case ("lf_heatflux")
