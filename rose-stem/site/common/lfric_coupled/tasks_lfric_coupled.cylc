@@ -16,8 +16,11 @@
         "threads": 1,
         "kgo_checks": ["checksum"],
         "xios_nodes": 1,
+        "xios_info_level": 1,
+        "xios_print_file": ".true.",
         "mpi_parts_xios": 6,
         "plot_str": "plot_map.py $NODAL_DATA_DIR/lfric_diag.nc  $PLOT_DIR",
+        "restart_write": true,
     }) %}
 
 {% elif task.startswith("build") %}
