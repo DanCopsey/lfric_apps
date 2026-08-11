@@ -301,10 +301,10 @@ contains
     z0h_z0m_miz          = 0.2_r_um
     z0h_z0m_sice         = 0.2_r_um
     z0sice               = 5.0e-4_r_um
-    l_zenith_albedo      = l_zenith_albedo_in
-    snow_grain_size_min  = snow_grain_size_min_in
-    snow_grain_size_max  = snow_grain_size_max_in
-    snowpatch            = snowpatch_in
+    l_zenith_albedo      = config%jules_sea_seaice%l_zenith_albedo()
+    snow_grain_size_min  = real(config%jules_sea_seaice%snow_grain_size_min(), r_um)
+    snow_grain_size_max  = real(config%jules_sea_seaice%snow_grain_size_max(), r_um)
+    snowpatch            = real(config%jules_sea_seaice%snowpatch(), r_um)
 
     ! Setup the melt pond albedo scheme
     select case (config%jules_sea_seaice%meltpond_alb_vn())
