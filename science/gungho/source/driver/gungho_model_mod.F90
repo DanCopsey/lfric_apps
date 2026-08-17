@@ -305,20 +305,6 @@ contains
                         mode=CHECKPOINTING, operation="once", &
                         id_as_name=.true.)
 #ifdef UM_PHYSICS
-        if (use_spt) then
-          do i = 1, spt_array_count
-            call add_field( persistor%ckp_out, spt_array_names(i),  &
-                            mode=CHECKPOINTING, operation="once",   &
-                            id_as_name=.true.)
-          end do
-        end if
-        if (use_skeb) then
-          do i = 1, skeb_array_count
-            call add_field( persistor%ckp_out, skeb_array_names(i), &
-                            mode=CHECKPOINTING, operation="once",   &
-                            id_as_name=.true.)
-          end do
-        end if
 
         if(l_esm_couple) then
           call add_field( persistor%ckp_out, "lf_taux", mode=CHECKPOINTING, operation="once", &
@@ -365,22 +351,6 @@ contains
         call add_field( persistor%ckp_inp, "random_seed",  &
                         mode=RESTARTING, operation="once", &
                         id_as_name=.true.)
-#ifdef UM_PHYSICS
-        if (use_spt) then
-          do i = 1, spt_array_count
-            call add_field( persistor%ckp_inp, spt_array_names(i),  &
-                            mode=RESTARTING, operation="once",      &
-                            id_as_name=.true.)
-          end do
-        end if
-        if (use_skeb) then
-          do i = 1, skeb_array_count
-            call add_field( persistor%ckp_inp, skeb_array_names(i), &
-                            mode=RESTARTING, operation="once",      &
-                            id_as_name=.true.)
-          end do
-        end if
-#endif
       end if
       if(l_esm_couple) then
         call add_field( persistor%ckp_inp, "lf_taux", mode=RESTARTING, operation="once", &
