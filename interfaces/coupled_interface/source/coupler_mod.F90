@@ -87,7 +87,7 @@ module coupler_mod
     implicit none
     type( modeldb_type ), intent(inout) :: modeldb
 
-    type( field_collection_type ), pointer       :: cpl_rcv_2d
+    type( field_collection_type ), pointer       :: cpl_snd_2d
     type( field_collection_type ), pointer       :: depository
 
     ! Field in the form that comes out of a field collection iterator
@@ -100,13 +100,13 @@ module coupler_mod
     real(r_def), pointer                         :: acc_step
 
     depository => modeldb%fields%get_field_collection("depository")
-    cpl_rcv_2d => modeldb%fields%get_field_collection("cpl_rcv_2d")
+    cpl_snd_2d => modeldb%fields%get_field_collection("cpl_snd_2d")
 
     ! Reset the accumulation step counter
     call modeldb%values%get_value( 'accumulation_steps', acc_step )
     acc_step = 0.0_r_def
 
-    call iter%initialise(cpl_rcv_2d)
+    call iter%initialise(cpl_snd_2d)
     do
       if (.not.iter%has_next())exit
       field_iter => iter%next()
