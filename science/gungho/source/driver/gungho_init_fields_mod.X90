@@ -774,22 +774,6 @@ subroutine create_model_data( modeldb,           &
       call random_seed_io_value%set_checkpoint_read_behaviour(integer_io_op_read_ptr)
       call random_seed_io_value%set_checkpoint_write_behaviour(integer_io_op_write_ptr)
 
-#ifdef UM_PHYSICS
-      if (use_spt) then
-        do i = 1, spt_array_count
-          stph_io_value => get_io_value(modeldb%values, trim(spt_array_names(i)))
-          call stph_io_value%set_checkpoint_read_behaviour(io_op_read_ptr)
-          call stph_io_value%set_checkpoint_write_behaviour(io_op_write_ptr)
-        end do
-      end if
-      if (use_skeb) then
-        do i = 1, skeb_array_count
-          stph_io_value => get_io_value(modeldb%values, trim(skeb_array_names(i)))
-          call stph_io_value%set_checkpoint_read_behaviour(io_op_read_ptr)
-          call stph_io_value%set_checkpoint_write_behaviour(io_op_write_ptr)
-        end do
-      end if
-#endif
     end if
     ! Initialise prognostic fields appropriately
     select case ( prognostic_init_choice )
@@ -1134,38 +1118,26 @@ subroutine create_model_data( modeldb,           &
           ! Read the checkpointed random seed
           call random_seed_io_value%read_checkpoint()
           ranseed = random_seed_io_value%data
+        endif
 
 #ifdef UM_PHYSICS
-          ! Read arrays for SPT and SKEB schemes
-          if (use_spt) then
-            do i = 1, spt_array_count
-              stph_io_value => get_io_value(modeldb%values, trim(spt_array_names(i)))
-              call stph_io_value%read_checkpoint()
-            end do
-          end if
-          if (use_skeb) then
-            do i = 1, skeb_array_count
-              stph_io_value => get_io_value(modeldb%values, trim(skeb_array_names(i)))
-              call stph_io_value%read_checkpoint()
-            end do
-          end if
-        else
-          if (use_spt) then
-            stph_io_value => get_io_value(modeldb%values, trim(spt_array_names(3)))
-            allocate(power_law, source = stph_io_value%data)
-            call spt_init_power_law(power_law, modeldb%clock)
-            stph_io_value%data = power_law
-            deallocate(power_law)
-          end if
-          if (use_skeb) then
-            stph_io_value => get_io_value(modeldb%values, trim(skeb_array_names(3)))
-            allocate(power_law, source = stph_io_value%data)
-            call skeb_init_power_law(power_law, modeldb%clock)
-            stph_io_value%data = power_law
-            deallocate(power_law)
-          end if
-#endif
+
+        if (use_spt) then
+          stph_io_value => get_io_value(modeldb%values, trim(spt_array_names(3)))
+          allocate(power_law, source = stph_io_value%data)
+          call spt_init_power_law(power_law, modeldb%clock)
+          stph_io_value%data = power_law
+          deallocate(power_law)
         end if
+        if (use_skeb) then
+          stph_io_value => get_io_value(modeldb%values, trim(skeb_array_names(3)))
+          allocate(power_law, source = stph_io_value%data)
+          call skeb_init_power_law(power_law, modeldb%clock)
+          stph_io_value%data = power_law
+          deallocate(power_law)
+        end if
+        
+#endif
 
         ! Set random seed for stochastic physics
         call random_seed(put = ranseed(1:random_seed_size))
