@@ -131,7 +131,7 @@ contains
          ip_ss_coare_mq, a_chrn_coare, b_chrn_coare, u10_max_coare,         &
          l_10m_neut, alpham, dtice, l_iceformdrag_lupkes,                   &
          l_stability_lupkes, l_use_dtstar_sea, hcap_sea, beta_evap,         &
-         l_sice_meltponds, i_meltpond_alb_vn, l_zenith_albedo,              &
+         l_sice_meltponds, meltpond_alb_vn, l_zenith_albedo,                &
          snow_grain_size_min, snow_grain_size_max, snowpatch,               &
          l_cice_alb, l_saldep_freeze, l_sice_multilayers,                   &
          l_sice_scattering, l_sice_swpen, l_ssice_albedo,                   &
@@ -309,11 +309,11 @@ contains
     ! Setup the melt pond albedo scheme
     select case (config%jules_sea_seaice%meltpond_alb_vn())
       case(meltpond_alb_vn_none)
-        i_meltpond_alb_vn = ip_meltpond_alb_vn_none
+        meltpond_alb_vn = ip_meltpond_alb_vn_none
       case(meltpond_alb_vn_cice)
-        i_meltpond_alb_vn = ip_meltpond_alb_vn_cice
+        meltpond_alb_vn = ip_meltpond_alb_vn_cice
       case(meltpond_alb_vn_malinka)
-        i_meltpond_alb_vn = ip_meltpond_alb_vn_malinka
+        meltpond_alb_vn = ip_meltpond_alb_vn_malinka
     end select
 
     ! Setup switches that vary depending if the model is
