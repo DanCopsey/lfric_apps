@@ -1,3 +1,4 @@
+import re
 import sys
 
 from metomi.rose.upgrade import MacroUpgrade  # noqa: F401
@@ -39,8 +40,8 @@ class vn32_t744(MacroUpgrade):
     def upgrade(self, config, meta_config=None):
         # Commands From: rose-meta/jules-lsm
         # Bump tag to pick up metadata changes
-
         return config, self.reports
+
 
 class vn32_t400(MacroUpgrade):
     """Upgrade macro for ticket #400 by Dan Copsey."""
@@ -49,19 +50,40 @@ class vn32_t400(MacroUpgrade):
     AFTER_TAG = "vn3.2_t400"
 
     def upgrade(self, config, meta_config=None):
-
+        # Commands From: rose-meta/jules-lsm
         # Is this a coupled model? The easiest way to get this is from the number of sea ice categories.
-        nice = int(self.get_setting_value(config, ["namelist:jules_sea_seaice", "nice"]))
+        nice = int(
+            self.get_setting_value(
+                config, ["namelist:jules_sea_seaice", "nice"]
+            )
+        )
         is_coupled = nice > 1
-
         # Add the new namelist settings
-        self.add_setting(config, ["namelist:jules_sea_seaice", "l_zenith_albedo"], ".true.")
+        self.add_setting(
+            config, ["namelist:jules_sea_seaice", "l_zenith_albedo"], ".true."
+        )
         if is_coupled:
-            self.add_setting(config, ["namelist:jules_sea_seaice", "meltpond_alb_vn"], "'malinka'")
+            self.add_setting(
+                config,
+                ["namelist:jules_sea_seaice", "meltpond_alb_vn"],
+                "'malinka'",
+            )
         else:
-            self.add_setting(config, ["namelist:jules_sea_seaice", "meltpond_alb_vn"], "'none'")
-        self.add_setting(config, ["namelist:jules_sea_seaice", "snow_grain_size_max"], "140.0")
-        self.add_setting(config, ["namelist:jules_sea_seaice", "snow_grain_size_min"], "70.0")
-        self.add_setting(config, ["namelist:jules_sea_seaice", "snowpatch"], "0.02")
+            self.add_setting(
+                config,
+                ["namelist:jules_sea_seaice", "meltpond_alb_vn"],
+                "'none'",
+            )
+        self.add_setting(
+            config,
+            ["namelist:jules_sea_seaice", "snow_grain_size_max"],
+            "140.0",
+        )
+        self.add_setting(
+            config, ["namelist:jules_sea_seaice", "snow_grain_size_min"], "70.0"
+        )
+        self.add_setting(
+            config, ["namelist:jules_sea_seaice", "snowpatch"], "0.02"
+        )
 
         return config, self.reports
