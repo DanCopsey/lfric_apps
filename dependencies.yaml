@@ -19,19 +19,19 @@
 
 casim:
     source: git@github.com:MetOffice/casim.git
-    ref: 2026.07.1
+    ref: 996db30c2bac55360623eb081b4d2e273289f4de
 
 jules:
-    source: git@github.com:DanCopsey/jules.git
-    ref: zenith_angle_seaice
+    source: cazld00001l:/var/tmp/persistent/review_copies/jules
+    ref:
 
 lfric_apps:
     source:
     ref:
 
 lfric_core:
-   source: git@github.com:MetOffice/lfric_core.git
-   ref: 220a00ce5fb318513918e3b7f063be54945f9149
+    source: git@github.com:MetOffice/lfric_core.git
+    ref: 0258fdbe0cca4d7839f8263f3fb9e97bd47cccf7
 
 moci:
     source: git@github.com:MetOffice/moci.git

@@ -70,7 +70,9 @@ module gungho_model_mod
   use minmax_tseries_mod,         only : minmax_tseries,      &
                                          minmax_tseries_init, &
                                          minmax_tseries_final
-  use mesh_mod,                   only : mesh_type
+  use mesh_mod,                   only : mesh_type, &
+                                         geometry_planar, &
+                                         geometry_spherical
   use mesh_collection_mod,        only : mesh_collection
   use clock_mod,                  only : clock_type
   use model_clock_mod,            only : model_clock_type
@@ -322,8 +324,10 @@ contains
                             id_as_name=.true.)
           end do
         end if
-
-        if(l_esm_couple) then
+#endif
+      end if
+#ifdef UM_PHYSICS
+      if(l_esm_couple) then
           call add_field( persistor%ckp_out, "lf_taux", mode=CHECKPOINTING, operation="once", &
                           id_as_name=.true.)
           call add_field( persistor%ckp_out, "lf_tauy", mode=CHECKPOINTING, operation="once", &
@@ -354,9 +358,8 @@ contains
                           id_as_name=.true.)
           call add_field( persistor%ckp_out, "lf_pensolar", mode=CHECKPOINTING, operation="once", &
                           id_as_name=.true.)
-        end if
-#endif
       end if
+#endif
     end if
     if (checkpoint_read .or. init_option == init_option_checkpoint_dump) then
       if ( encorr_usage /= encorr_usage_none ) then
@@ -520,9 +523,6 @@ contains
   !>
   subroutine initialise_infrastructure( io_context_name, modeldb )
 
-    use base_mesh_config_mod, only: geometry_planar, &
-                                    geometry_spherical
-
 #ifdef UM_PHYSICS
     use formulation_config_mod,    only: use_physics
     use section_choice_config_mod, only: radiation, &
@@ -576,6 +576,8 @@ contains
     character(str_def), allocatable :: twod_names(:)
     character(str_def), allocatable :: shifted_names(:)
     character(str_def), allocatable :: double_names(:)
+    integer(i_def)                  :: stretching_method
+    real(r_def)                     :: stretching_height
 
     character(str_def), allocatable :: meshes_to_check(:)
 
@@ -635,14 +637,16 @@ contains
       chain_mesh_tags = modeldb%config%multigrid%chain_mesh_tags()
     end if
 
-    prime_mesh_name  = modeldb%config%base_mesh%prime_mesh_name()
-    geometry         = modeldb%config%base_mesh%geometry()
-    topology         = modeldb%config%base_mesh%topology()
-    prepartitioned   = modeldb%config%base_mesh%prepartitioned()
-    domain_height    = modeldb%config%extrusion%domain_height()
-    extrusion_method = modeldb%config%extrusion%method()
-    number_of_layers = modeldb%config%extrusion%number_of_layers()
-    scaled_radius    = modeldb%config%planet%scaled_radius()
+    prime_mesh_name   = modeldb%config%base_mesh%prime_mesh_name()
+    geometry          = modeldb%config%base_mesh%geometry()
+    topology          = modeldb%config%base_mesh%topology()
+    prepartitioned    = modeldb%config%base_mesh%prepartitioned()
+    domain_height     = modeldb%config%extrusion%domain_height()
+    extrusion_method  = modeldb%config%extrusion%method()
+    stretching_method = modeldb%config%extrusion%stretching_method()
+    stretching_height = modeldb%config%extrusion%stretching_height()
+    number_of_layers  = modeldb%config%extrusion%number_of_layers()
+    scaled_radius     = modeldb%config%planet%scaled_radius()
 
     if (prepartitioned) then
       tile_size_x = 1
@@ -1064,6 +1068,8 @@ contains
                               orography_mesh%get_mesh_name(), &
                               chi_inventory,                  &
                               panel_id_inventory,             &
+                              stretching_height,              &
+                              stretching_method,              &
                               surface_altitude )
 
 
